@@ -5,7 +5,7 @@
 
 int main() 
 {
-    CVEC_Vec2f* vec = cvecVec2fCreate(2, 3);
+    CVECVec2f* vec = cvecVec2fCreate(2, 3);
 
     cvecVec2fTranslate(NULL, 0, 0);
     cvecVec2fTranslate(vec, 1, -2);

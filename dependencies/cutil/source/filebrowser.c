@@ -92,7 +92,7 @@ const char* cutilFileBrowserLoadFile(const char* filePath)
     int didError = 0;
     do 
     {
-        readSize = fread(&fileContentBuffer[contentSize], sizeof(char), CUTIL_FS_CHUNK_SIZE, file);
+        readSize = fread(&fileContentBuffer[contentSize], sizeof(char), CUTIL_FS_READ_CHUNK_SIZE, file);
         if (ferror(file)) 
         {
             didError = 1;
@@ -102,7 +102,7 @@ const char* cutilFileBrowserLoadFile(const char* filePath)
         contentSize += readSize;
         if(contentSize == fileContentBufferSize) 
         {
-            fileContentBufferSize = fileContentBufferSize + CUTIL_FS_CHUNK_SIZE * 10;
+            fileContentBufferSize = fileContentBufferSize + CUTIL_FS_READ_CHUNK_SIZE * 10;
             char* newContent = realloc(fileContentBuffer, fileContentBufferSize);
             if(!newContent)
             {
@@ -112,7 +112,7 @@ const char* cutilFileBrowserLoadFile(const char* filePath)
             fileContentBuffer = newContent;
         }
             
-    } while (readSize == CUTIL_FS_CHUNK_SIZE);
+    } while (readSize == CUTIL_FS_READ_CHUNK_SIZE);
 
     fclose(file);
     if(didError)
