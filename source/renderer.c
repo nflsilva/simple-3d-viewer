@@ -4,6 +4,7 @@ static S3VRenderer* renderer;
 
 void s3vRendererInit() {
     renderer = (S3VRenderer*) malloc(sizeof(S3VRenderer));
+    renderer->shader = s3vShaderCreateDefaultShader();
 }
 
 void s3vRendererDestroy() {

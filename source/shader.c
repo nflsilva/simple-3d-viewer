@@ -182,7 +182,7 @@ int s3vShaderSetUniformMat4F(S3VShader* shader, const char* name, float* values)
     return S3V_SUCCESS;
 }
 
-S3VShader* s3vShaderCreateShapeShader()
+S3VShader* s3vShaderCreateDefaultShader()
 {
     const char* vertexShaderCode = cutilFileBrowserLoadFile("../assets/shader/vertex.glsl");
     if(!vertexShaderCode) return NULL;

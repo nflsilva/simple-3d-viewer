@@ -117,6 +117,6 @@ int s3vShaderSetUniformMat4F(S3VShader* shader, const char* name, float* values)
  * Creates a shader for the different available shapes.
  * @returns A pointer to the newly created shader. `NULL` if an error occurred.
  */
-S3VShader* s3vShaderCreateShapeShader();
+S3VShader* s3vShaderCreateDefaultShader();
 
 #endif
