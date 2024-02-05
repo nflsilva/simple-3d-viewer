@@ -192,9 +192,9 @@ S3VShader* s3vShaderCreateDefaultShader()
     S3VShader* shader = s3vShaderCreate(&vertexShaderCode, &fragmentShaderCode);
     if(!shader) return NULL;
 
-    s3vShaderAddUniform(shader, "uni_modelMatrix");
-    s3vShaderAddUniform(shader, "uni_viewMatrix");
-    s3vShaderAddUniform(shader, "uni_modelMatrix");
+    //s3vShaderAddUniform(shader, "uni_modelMatrix");
+    //s3vShaderAddUniform(shader, "uni_viewMatrix");
+    //s3vShaderAddUniform(shader, "uni_modelMatrix");
 
     free((char*)vertexShaderCode);
     free((char*)fragmentShaderCode);

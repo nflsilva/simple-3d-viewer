@@ -15,6 +15,8 @@ void s3vRendererInit();
 
 void s3vRendererDestroy();
 
+void s3vRendererRender();
+
 void s3vRendererRenderMesh(S3VMesh* mesh);
 
 #endif

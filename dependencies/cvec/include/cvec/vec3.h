@@ -11,7 +11,7 @@
  * @param z The value of `z` coordinate.
  */
 typedef struct CVECVec3f {
-    int x, y, z;
+    float x, y, z;
 } CVECVec3f;
 
 /*!

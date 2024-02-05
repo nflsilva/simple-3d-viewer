@@ -41,12 +41,15 @@ void s3vUIInit(GLFWwindow* window)
 
 void s3vUIUpdate()
 {
+    return;
     glfwGetWindowSize(glfwWindow, &width, &height);
     nk_glfw3_new_frame(&glfw);
 
+    
     s3vUIRenderToolbar();
     if(renderFileBrowser)
         s3vUIRenderFilebrowser();
+
 
     nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 }

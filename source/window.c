@@ -18,8 +18,8 @@ int s3vWindowOpen(int width, int height, const char* title)
         return S3V_FAILURE;
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     s3vWindow = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!s3vWindow)
     {
@@ -31,6 +31,11 @@ int s3vWindowOpen(int width, int height, const char* title)
     glfwMakeContextCurrent(s3vWindow);
     gladLoadGL();
     glfwSwapInterval(1);
+
+    const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
+    const GLubyte* version = glGetString(GL_VERSION); // version as a string
+    printf("Renderer: %s\n", renderer);
+    printf("OpenGL version supported %s\n", version);
 
     s3vUIInit(s3vWindow);
 
@@ -52,12 +57,8 @@ void s3vWindowClose()
 
 void s3vWindowUpdate() 
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0, 0, 0, 1);
-
-    glfwPollEvents();
-
     s3vUIUpdate();
 
+    glfwPollEvents();
     glfwSwapBuffers(s3vWindow);
 }

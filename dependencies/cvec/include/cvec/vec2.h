@@ -10,7 +10,7 @@
  * @param y The value of `y` coordinate.
  */
 typedef struct CVECVec2f {
-    int x, y;
+    float x, y;
 } CVECVec2f;
 
 /*!
