@@ -1,6 +1,7 @@
 #ifndef _S3V_SHADER_H
 #define _S3V_SHADER_H
 
+#include <assert.h>
 #include <glad/glad.h>
 
 #include "cutil/hashTable.h"

@@ -45,7 +45,6 @@ void s3vMeshAttributeDestroy(S3VMeshAttribute* attribute)
 {
     assert(attribute);
     glDeleteBuffers(1, &attribute->glVBO);
-    free(attribute);
 }
 
 S3VMesh* s3vMeshCreate()
@@ -73,6 +72,7 @@ void s3vMeshBind(S3VMesh* mesh)
 {
     assert(mesh);
 
+    glBindVertexArray(mesh->glVAO);
     for(unsigned int i = 0; i < mesh->nAttributes; i++) 
     {
         glEnableVertexAttribArray(i);

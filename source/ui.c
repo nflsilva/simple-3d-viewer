@@ -41,7 +41,6 @@ void s3vUIInit(GLFWwindow* window)
 
 void s3vUIUpdate()
 {
-    return;
     glfwGetWindowSize(glfwWindow, &width, &height);
     nk_glfw3_new_frame(&glfw);
 

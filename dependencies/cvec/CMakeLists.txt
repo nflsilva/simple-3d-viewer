@@ -4,6 +4,8 @@ project(cvec)
 
 set(CVEC_SOURCES
   source/vec2.c
+  source/vec3.c
+  source/mat4.c
 )
 
 include_directories(include)

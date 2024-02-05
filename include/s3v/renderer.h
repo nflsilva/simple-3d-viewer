@@ -3,12 +3,15 @@
 
 #include <assert.h>
 
+#include "cvec/mat4.h"
 #include "s3v/mesh.h"
 #include "s3v/shader.h"
 
 typedef struct S3VRenderer {
     S3VShader* shader;
     S3VMesh* mesh;
+    CVECMat4f* projectionMatrix;
+    CVECMat4f* modelMatrix;
 } S3VRenderer;
 
 void s3vRendererInit();

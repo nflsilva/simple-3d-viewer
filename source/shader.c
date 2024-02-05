@@ -56,7 +56,9 @@ S3VShader* s3vShaderCreate(const char** vertexCode, const char** fragmentCode)
 
 void s3vShaderDestroy(S3VShader* shader)
 {
-    if(!shader || !shader->shaderList || !shader->uniformLocations) return;
+    assert(shader);
+    assert(shader->shaderList);
+    assert(shader->uniformLocations);
 
     s3vShaderUnbind(shader);
 
@@ -74,7 +76,7 @@ void s3vShaderDestroy(S3VShader* shader)
 
 void s3vShaderBind(S3VShader* shader)
 {
-    if(!shader) return;
+    assert(shader);
     glUseProgram(shader->programId);
 }
 
@@ -85,6 +87,7 @@ void s3vShaderUnbind()
 
 int s3vShaderLinkProgram(S3VShader* shader)
 {
+    assert(shader);
     GLint success;
 
     glLinkProgram(shader->programId);
@@ -107,23 +110,26 @@ int s3vShaderLinkProgram(S3VShader* shader)
 
 void s3vShaderBindAttribute(S3VShader* shader, int attribute, const char* variableName)
 {
+    assert(shader);
     glBindAttribLocation(shader->programId, attribute, variableName);
 }
 
 int s3vShaderAddUniform(S3VShader* shader, const char* name)
 {
+    assert(shader);
     GLuint location = glGetUniformLocation(shader->programId, name);
     if(location == GL_INVALID_VALUE || location == GL_INVALID_OPERATION || location == GL_INVALID_OPERATION)
     {
         //s3vShaderGetProgramInfoLog(shader);
         return S3V_FAILURE;
     }
-    cutilHashTableAddElement(shader->uniformLocations, name, &location);
+    cutilHashTableAddElement(shader->uniformLocations, name, ((GLuint*) location));
     return S3V_SUCCESS;
 }
 
 int s3vShaderSetUniformI(S3VShader* shader, const char* name, int value)
 {
+    assert(shader);
     GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
@@ -136,6 +142,7 @@ int s3vShaderSetUniformI(S3VShader* shader, const char* name, int value)
 
 int s3vShaderSetUniformF(S3VShader* shader, const char* name, float value)
 {
+    assert(shader);
     GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
@@ -148,6 +155,7 @@ int s3vShaderSetUniformF(S3VShader* shader, const char* name, float value)
 
 int s3vShaderSetUniformVec3F(S3VShader* shader, const char* name, float* values)
 {
+    assert(shader);
     GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
@@ -160,6 +168,7 @@ int s3vShaderSetUniformVec3F(S3VShader* shader, const char* name, float* values)
 
 int s3vShaderSetUniformVec4F(S3VShader* shader, const char* name, float* values)
 {
+    assert(shader);
     GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
@@ -172,29 +181,31 @@ int s3vShaderSetUniformVec4F(S3VShader* shader, const char* name, float* values)
 
 int s3vShaderSetUniformMat4F(S3VShader* shader, const char* name, float* values)
 {
-    GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
+    assert(shader);
+    GLuint location = (GLuint)cutilHashTableGetElement(shader->uniformLocations, name);
+    /*
     if(!location)
     {
         s3vSetErrorMessage("Location not found");
         return S3V_FAILURE;
-    }
+    }*/
 	glUniformMatrix4fv(location, 1, GL_FALSE, values);
     return S3V_SUCCESS;
 }
 
 S3VShader* s3vShaderCreateDefaultShader()
 {
-    const char* vertexShaderCode = cutilFileBrowserLoadFile("../assets/shader/vertex.glsl");
+    const char* vertexShaderCode = cutilFileBrowserLoadFile("/mnt/storage/w0/projects/simple-3d-viewer/assets/shader/vertex.glsl");
     if(!vertexShaderCode) return NULL;
-    const char* fragmentShaderCode = cutilFileBrowserLoadFile("../assets/shader/fragment.glsl");
+    const char* fragmentShaderCode = cutilFileBrowserLoadFile("/mnt/storage/w0/projects/simple-3d-viewer/assets/shader/fragment.glsl");
     if(!fragmentShaderCode) return NULL;
     
     S3VShader* shader = s3vShaderCreate(&vertexShaderCode, &fragmentShaderCode);
     if(!shader) return NULL;
 
-    //s3vShaderAddUniform(shader, "uni_modelMatrix");
-    //s3vShaderAddUniform(shader, "uni_viewMatrix");
-    //s3vShaderAddUniform(shader, "uni_modelMatrix");
+    s3vShaderAddUniform(shader, "uni_projectionMatrix");
+    s3vShaderAddUniform(shader, "uni_viewMatrix");
+    s3vShaderAddUniform(shader, "uni_modelMatrix");
 
     free((char*)vertexShaderCode);
     free((char*)fragmentShaderCode);
