@@ -32,4 +32,14 @@ CVECVec3f* cvecVec3fCreate(float x, float y, float z);
  */
 void cvecVec3fTranslate(CVECVec3f* vec, float dx, float dy, float dz);
 
+CVECVec3f* cvecVec3fSub(CVECVec3f* vec0, CVECVec3f* vec1);
+
+float cvecVec3fDot(CVECVec3f* vec0, CVECVec3f* vec1);
+
+CVECVec3f* cvecVec3fCross(CVECVec3f* vec0, CVECVec3f* vec1);
+
+void cvecVec3fNormalize(CVECVec3f* vec);
+
+float cvecVec3fMagnitude(CVECVec3f* vec);
+
 #endif

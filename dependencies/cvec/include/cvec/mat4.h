@@ -6,13 +6,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "cvec/vec3.h"
+
 /*!
  * Represents a 4x4 matrix of type `float`.
  * @param data The value of `x` coordinate.
  */
 typedef struct CVECMat4f {
-    float data[16];
+    float data[4][4];
 } CVECMat4f;
+/*
+     0, 1,   2,  3,
+     4, 5,   6,  7,
+     8, 9,  10, 11,
+    12, 13, 14, 15 
+*/
+
 
 /*!
  * Creates a new 4x4 identity matrix of type `float`.
@@ -39,12 +48,16 @@ CVECMat4f* cvecMat4fCreatePerspective(float near, float far, float angleOfView);
  * @param dy The value of delta `y`.
  * @param dz The value of delta `z`.
  */
-void cvecMat4fTranslate(CVECMat4f* mat, float dx, float dy, float dz);
+CVECMat4f* cvecMat4fCreateTranslate(float dx, float dy, float dz);
 
-void cvecMat4fRotateAboutXAxis(CVECMat4f* mat, float angle);
+CVECMat4f* cvecMat4fCreateRotationXAxis(float angle);
 
-void cvecMat4fRotateAboutYAxis(CVECMat4f* mat, float angle);
+CVECMat4f* cvecMat4fCreateRotationYAxis(float angle);
 
-void cvecMat4fRotateAboutZAxis(CVECMat4f* mat, float angle);
+CVECMat4f* cvecMat4fCreateRotationZAxis(float angle);
+
+CVECMat4f* cvecMat4fCreateLookAt(CVECVec3f* eye, CVECVec3f* target, CVECVec3f* up);
+
+void cvecMat4MatMult(CVECMat4f* mat0, CVECMat4f* mat1);
 
 #endif

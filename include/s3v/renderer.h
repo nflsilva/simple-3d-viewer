@@ -12,6 +12,7 @@ typedef struct S3VRenderer {
     S3VMesh* mesh;
     CVECMat4f* projectionMatrix;
     CVECMat4f* modelMatrix;
+    CVECMat4f* viewMatrix;
 } S3VRenderer;
 
 void s3vRendererInit();

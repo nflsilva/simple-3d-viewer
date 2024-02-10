@@ -123,73 +123,74 @@ int s3vShaderAddUniform(S3VShader* shader, const char* name)
         //s3vShaderGetProgramInfoLog(shader);
         return S3V_FAILURE;
     }
-    cutilHashTableAddElement(shader->uniformLocations, name, ((GLuint*) location));
+    GLuint* heapLocation = (GLuint*)malloc(sizeof(GLuint));
+    *heapLocation = location; 
+    cutilHashTableAddElement(shader->uniformLocations, name, ((GLuint*) heapLocation));
     return S3V_SUCCESS;
 }
 
 int s3vShaderSetUniformI(S3VShader* shader, const char* name, int value)
 {
     assert(shader);
-    GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
+    GLuint* location = (GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
         s3vSetErrorMessage("Location not found");
         return S3V_FAILURE;
     }
-	glUniform1i(location, value);
+	glUniform1i(*location, value);
     return S3V_SUCCESS;
 }
 
 int s3vShaderSetUniformF(S3VShader* shader, const char* name, float value)
 {
     assert(shader);
-    GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
+    GLuint* location = (GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
         s3vSetErrorMessage("Location not found");
         return S3V_FAILURE;
     }
-	glUniform1f(location, value);
+	glUniform1f(*location, value);
     return S3V_SUCCESS;
 }
 
 int s3vShaderSetUniformVec3F(S3VShader* shader, const char* name, float* values)
 {
     assert(shader);
-    GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
+    GLuint* location = (GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
         s3vSetErrorMessage("Location not found");
         return S3V_FAILURE;
     }
-	glUniform3f(location, values[0], values[1], values[2]);
+	glUniform3f(*location, values[0], values[1], values[2]);
     return S3V_SUCCESS;
 }
 
 int s3vShaderSetUniformVec4F(S3VShader* shader, const char* name, float* values)
 {
     assert(shader);
-    GLuint location = *(GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
+    GLuint* location = (GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
         s3vSetErrorMessage("Location not found");
         return S3V_FAILURE;
     }
-	glUniform4f(location, values[0], values[1], values[2], values[3]);
+	glUniform4f(*location, values[0], values[1], values[2], values[3]);
     return S3V_SUCCESS;
 }
 
 int s3vShaderSetUniformMat4F(S3VShader* shader, const char* name, float* values)
 {
     assert(shader);
-    GLuint location = (GLuint)cutilHashTableGetElement(shader->uniformLocations, name);
-    /*
+    GLuint* location = (GLuint*)cutilHashTableGetElement(shader->uniformLocations, name);
     if(!location)
     {
         s3vSetErrorMessage("Location not found");
         return S3V_FAILURE;
-    }*/
-	glUniformMatrix4fv(location, 1, GL_FALSE, values);
+    }
+	glUniformMatrix4fv(*location, 1, GL_FALSE, values);
     return S3V_SUCCESS;
 }
 

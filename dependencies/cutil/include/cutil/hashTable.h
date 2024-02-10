@@ -9,6 +9,8 @@
 
 #define _CUTIL_TABLE_SIZE 50000
 
+#define CUTIL_NULL ((void*)-1)
+
 /*!
  * Stores the hash table bucket item context.
  * @param key The key for this item 

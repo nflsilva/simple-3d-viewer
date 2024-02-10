@@ -1,12 +1,13 @@
 #include "s3v/mesh.h"
 
-void s3vMeshSetIndexAttribute(S3VMesh* mesh, unsigned int size, unsigned int* buffer)
+void s3vMeshSetIndexAttribute(S3VMesh* mesh, unsigned int count, unsigned int* buffer)
 {
     assert(mesh);
     assert(mesh->indexAttribute.glVBO == 0);
 
     S3VMeshAttribute* attr = &mesh->indexAttribute;
-    attr->sizeInBytes = sizeof(GL_UNSIGNED_INT) * size;
+    attr->count = count;
+    attr->sizeInBytes = count * sizeof(GL_UNSIGNED_INT);
     attr->data = buffer;
 
     glBindVertexArray(mesh->glVAO);
@@ -17,7 +18,7 @@ void s3vMeshSetIndexAttribute(S3VMesh* mesh, unsigned int size, unsigned int* bu
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void s3vMeshAttributeAdd(S3VMesh* mesh, unsigned int nComponents, unsigned int size, int type, void* buffer)
+void s3vMeshAttributeAdd(S3VMesh* mesh, unsigned int nComponents, unsigned int count, int type, void* buffer)
 {
 
     // nComponents - 3 for x, y, z
@@ -27,7 +28,8 @@ void s3vMeshAttributeAdd(S3VMesh* mesh, unsigned int nComponents, unsigned int s
     assert(mesh);
 
     S3VMeshAttribute* attr = &mesh->attributes[mesh->nAttributes];
-    attr->sizeInBytes = sizeof(type) * nComponents * size;
+    attr->count = count;
+    attr->sizeInBytes = sizeof(type) * nComponents * count;
     attr->data = buffer;
 
     glBindVertexArray(mesh->glVAO);

@@ -77,12 +77,12 @@ void cutilHashTableAddElement(CUTILHashTable* hashTable, const char* key, void* 
 
 void* cutilHashTableGetElement(CUTILHashTable* hashTable, const char* key) 
 {
-    if(!hashTable) return NULL;
+    if(!hashTable) return CUTIL_NULL;
 
     CUTILHashTableBucket* bucket = getBucketForKey(hashTable, key);
 
     // key doesn't exist
-    if(bucket->chain == NULL || bucket->chain->size == 0) return NULL;
+    if(bucket->chain == NULL || bucket->chain->size == 0) return CUTIL_NULL;
 
     // key has no collisions
     if(bucket->chain->size == 1) return ((CUTILHashTableBucketChainNode*)cutilListGetElement(bucket->chain, 0))->data;
@@ -94,17 +94,17 @@ void* cutilHashTableGetElement(CUTILHashTable* hashTable, const char* key)
         if(strcmp(node->key, key) == 0) return node->data;
     }
 
-    return NULL;
+    return CUTIL_NULL;
 }
 
 void* cutilHashTableRemoveElement(CUTILHashTable* hashTable, const char* key) 
 {
-    if(!hashTable) return NULL;
+    if(!hashTable) return CUTIL_NULL;
 
     CUTILHashTableBucket* bucket = getBucketForKey(hashTable, key);
 
     // key doesn't exist
-    if(bucket->chain == NULL || bucket->chain->size == 0) return NULL;
+    if(bucket->chain == CUTIL_NULL || bucket->chain->size == 0) return CUTIL_NULL;
 
     // check if this was the last element on the chain and updates bucket if so
     if(bucket->chain->size == 1) {
@@ -117,7 +117,7 @@ void* cutilHashTableRemoveElement(CUTILHashTable* hashTable, const char* key)
     }
 
     // find the key on chain
-    void* dataPtr = NULL;
+    void* dataPtr = CUTIL_NULL;
     for(int i = 0; i < bucket->chain->size; i++) 
     {
         CUTILHashTableBucketChainNode* node = cutilListGetElement(bucket->chain, i);
