@@ -5,6 +5,7 @@
 #include "s3v/mesh.h"
 #include "s3v/renderer.h"
 #include "s3v/shader.h"
+#include "s3v/context.h"
 #include "s3v/window.h"
 
 #include "cutil/filebrowser.h"
@@ -61,9 +62,13 @@ int main()
     s3vRendererInit();
     s3vRendererRenderMesh(mesh);
 
+    S3VContext context;
     while(!s3vWindowShouldClose()) 
     {
-        s3vRendererRender();
+        s3vWindowGetSize(&context.windowWidth, &context.windowHeight);
+
+        s3vRendererRender(&context);
+        s3vWindowRender(&context);
         s3vWindowUpdate();
     }
 

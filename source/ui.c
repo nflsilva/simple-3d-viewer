@@ -1,5 +1,7 @@
 #include "s3v/ui.h"
 
+
+#include "s3v/context.h"
 #include "cutil/filebrowser.h"
 
 #define NK_INCLUDE_FIXED_TYPES
@@ -23,15 +25,14 @@
 static struct nk_glfw glfw = { 0 };
 static struct nk_context *ctx;
 static int width, height;
-static GLFWwindow* glfwWindow;
+extern GLFWwindow* s3vWindow;
 static int renderFileBrowser = 0;
 static CUTILFileBrowser* fileBrowser = NULL;
 
-void s3vUIInit(GLFWwindow* window)
+void s3vUIInit()
 {
-    assert(window);
-    glfwWindow = window;
-    ctx = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
+    assert(s3vWindow);
+    ctx = nk_glfw3_init(&glfw, s3vWindow, NK_GLFW3_INSTALL_CALLBACKS);
     {
         struct nk_font_atlas *atlas;
         nk_glfw3_font_stash_begin(&glfw, &atlas);
@@ -39,16 +40,15 @@ void s3vUIInit(GLFWwindow* window)
     }
 }
 
-void s3vUIUpdate()
+void s3vUIRender(S3VContext* context)
 {
-    glfwGetWindowSize(glfwWindow, &width, &height);
+    width = context->windowWidth;
+    height = context->windowHeight;
     nk_glfw3_new_frame(&glfw);
 
-    
     s3vUIRenderToolbar();
     if(renderFileBrowser)
         s3vUIRenderFilebrowser();
-
 
     nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 }

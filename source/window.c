@@ -55,10 +55,18 @@ void s3vWindowClose()
     glfwDestroyWindow(s3vWindow);
 }
 
+void s3vWindowRender(S3VContext* context)
+{
+    s3vUIRender(context);
+}
+
 void s3vWindowUpdate() 
 {
-    s3vUIUpdate();
-
     glfwPollEvents();
     glfwSwapBuffers(s3vWindow);
+}
+
+void s3vWindowGetSize(int* width, int* height)
+{
+    glfwGetWindowSize(s3vWindow, width, height);
 }

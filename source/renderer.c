@@ -1,26 +1,29 @@
 #include "s3v/renderer.h"
 
 static S3VRenderer* renderer;
-static CVECMat4f* rot;
+static CVECMat4F* rot;
 
 void s3vRendererInit() 
 {
     renderer = (S3VRenderer*) malloc(sizeof(S3VRenderer));
     renderer->shader = s3vShaderCreateDefaultShader();
-    renderer->projectionMatrix = cvecMat4fCreatePerspective(0.1, 1000, 90);
-    renderer->modelMatrix = cvecMat4fCreateIdentity();
-    //cvecMat4fCreateTranslate(0.0f, 0.0f, -10.0f);
+    renderer->pvmMatrix = cvecMat4FCreateIdentity();
+    renderer->projectionMatrix = cvecMat4FCreateIdentity();
+    renderer->modelMatrix = cvecMat4FCreateIdentity();
+    renderer->viewMatrix = cvecMat4FCreateIdentity();
 
-    CVECVec3f* eye = cvecVec3fCreate(0, 0, 5);
+    CVECVec3f* eye = cvecVec3fCreate(2.5, 2.5, 2.5);
     CVECVec3f* lookAt = cvecVec3fCreate(0, 0, 0);
     CVECVec3f* up = cvecVec3fCreate(0, 1, 0);
-    renderer->viewMatrix = cvecMat4fCreateLookAt(eye, lookAt, up);
+    cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
+
     free(eye);
     free(lookAt);
     free(up);
 
-    rot = cvecMat4fCreateRotationXAxis(1.0f);
-    cvecMat4MatMult(rot, cvecMat4fCreateRotationYAxis(1.0f));
+    //rot = cvecMat4FXAxisRotation(1.0f);
+    //cvecMat4MatMult(rot, cvecMat4fCreateRotationYAxis(1.0f));
+    //cvecMat4MatMult(rot, cvecMat4fCreateRotationZAxis(1.0f));
 }
 
 void s3vRendererDestroy() 
@@ -31,7 +34,7 @@ void s3vRendererDestroy()
     free(renderer);
 }
 
-void s3vRendererRender() 
+void s3vRendererRender(S3VContext* context) 
 {
     assert(renderer);
 
@@ -41,16 +44,20 @@ void s3vRendererRender()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    //cvecMat4MatMult(renderer->modelMatrix, rot);
+    float aspectRatio = context->windowHeight / (float)context->windowWidth;
+    cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, 90, aspectRatio);
+
+    cvecMat4FSetIdentity(renderer->pvmMatrix);
+    cvecMat4MatMult(renderer->pvmMatrix, renderer->modelMatrix);
+    cvecMat4MatMult(renderer->pvmMatrix, renderer->viewMatrix);
+    cvecMat4MatMult(renderer->pvmMatrix, renderer->projectionMatrix);
+
     s3vShaderBind(renderer->shader);
-    s3vShaderSetUniformMat4F(renderer->shader, "uni_projectionMatrix", renderer->projectionMatrix->data);
-    s3vShaderSetUniformMat4F(renderer->shader, "uni_modelMatrix", renderer->modelMatrix->data);
-    s3vShaderSetUniformMat4F(renderer->shader, "uni_viewMatrix", renderer->viewMatrix->data);
-
-    cvecMat4MatMult(renderer->modelMatrix, rot);
-
+    s3vShaderSetUniformMat4F(renderer->shader, "uni_pvmMatrix", renderer->pvmMatrix->data);
     s3vMeshBind(renderer->mesh);
     glDrawElements(GL_TRIANGLES, renderer->mesh->indexAttribute.count, GL_UNSIGNED_INT, 0);
-    //glDrawArrays(GL_TRIANGLES, 0, 3);
+
     s3vShaderUnbind();
 }
 

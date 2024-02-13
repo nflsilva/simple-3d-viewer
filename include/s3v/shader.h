@@ -94,7 +94,7 @@ int s3vShaderSetUniformF(S3VShader* shader, const char* name, float value);
  * @param value A pointer to the list of values to set
  * @return 'S3V_SUCCESS' if everything when well. 'S3V_FAILURE' otherwise. 
  */
-int s3vShaderSetUniformVec3F(S3VShader* shader, const char* name, float* values);
+int s3vShaderSetUniformVec3F(S3VShader* shader, const char* name, float values[3]);
 
 /*!
  * Sets the value for a specific shader uniform of type `vec4`
@@ -103,7 +103,7 @@ int s3vShaderSetUniformVec3F(S3VShader* shader, const char* name, float* values)
  * @param value A pointer to the list of values to set
  * @return 'S3V_SUCCESS' if everything when well. 'S3V_FAILURE' otherwise. 
  */
-int s3vShaderSetUniformVec4F(S3VShader* shader, const char* name, float* values);
+int s3vShaderSetUniformVec4F(S3VShader* shader, const char* name, float values[4]);
 
 /*!
  * Sets the value for a specific shader uniform of type `mat4`
@@ -112,7 +112,7 @@ int s3vShaderSetUniformVec4F(S3VShader* shader, const char* name, float* values)
  * @param value A pointer to the list of values to set
  * @return 'S3V_SUCCESS' if everything when well. 'S3V_FAILURE' otherwise. 
  */
-int s3vShaderSetUniformMat4F(S3VShader* shader, const char* name, float* values);
+int s3vShaderSetUniformMat4F(S3VShader* shader, const char* name, float values[4][4]);
 
 /*!
  * Creates a shader for the different available shapes.

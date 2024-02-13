@@ -1,10 +1,11 @@
-#ifndef _SMT_WINDOW_H
-#define _SMT_WINDOW_H
+#ifndef _S3V_WINDOW_H
+#define _S3V_WINDOW_H
 
 #include <stdlib.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "s3v/context.h"
 #include "s3v/s3v.h"
 
 /*!
@@ -28,9 +29,13 @@ int s3vWindowShouldClose();
  */
 void s3vWindowClose();
 
+void s3vWindowRender(S3VContext* context);
+
 /*!
  *  Updates window context.
  */
 void s3vWindowUpdate();
+
+void s3vWindowGetSize(int* width, int* height);
 
 #endif

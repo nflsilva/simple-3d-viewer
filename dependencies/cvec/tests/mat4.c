@@ -5,8 +5,8 @@
 
 int main() 
 {
-    CVECMat4f* mat0 = cvecMat4fCreateIdentity();
-    CVECMat4f* mat1 = cvecMat4fCreateIdentity();
+    CVECMat4F* mat0 = cvecMat4FCreateIdentity();
+    CVECMat4F* mat1 = cvecMat4FCreateIdentity();
     assert(mat0);
     assert(mat1);
 

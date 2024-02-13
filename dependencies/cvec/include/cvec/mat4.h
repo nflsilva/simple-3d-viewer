@@ -12,9 +12,9 @@
  * Represents a 4x4 matrix of type `float`.
  * @param data The value of `x` coordinate.
  */
-typedef struct CVECMat4f {
+typedef struct CVECMat4F {
     float data[4][4];
-} CVECMat4f;
+} CVECMat4F;
 /*
      0, 1,   2,  3,
      4, 5,   6,  7,
@@ -22,12 +22,13 @@ typedef struct CVECMat4f {
     12, 13, 14, 15 
 */
 
-
 /*!
  * Creates a new 4x4 identity matrix of type `float`.
  * @return A pointer to the new matrix.
  */
-CVECMat4f* cvecMat4fCreateIdentity();
+CVECMat4F* cvecMat4FCreateIdentity();
+
+void cvecMat4FSetIdentity(CVECMat4F* mat);
 
 /*!
  * Creates a new 4x4 perspective projection matrix of type `float`.
@@ -39,7 +40,7 @@ CVECMat4f* cvecMat4fCreateIdentity();
  * @param top the top plane position
  * @return A pointer to the new matrix.
  */
-CVECMat4f* cvecMat4fCreatePerspective(float near, float far, float angleOfView);
+void cvecMat4FPerspective(CVECMat4F* mat, float near, float far, float fieldOfView, float aspectRatio);
 
 /*!
  * Translates a 4x4 identity matrix  of type `float`.
@@ -48,16 +49,16 @@ CVECMat4f* cvecMat4fCreatePerspective(float near, float far, float angleOfView);
  * @param dy The value of delta `y`.
  * @param dz The value of delta `z`.
  */
-CVECMat4f* cvecMat4fCreateTranslate(float dx, float dy, float dz);
+void cvecMat4FTranslation(CVECMat4F* mat, float dx, float dy, float dz);
 
-CVECMat4f* cvecMat4fCreateRotationXAxis(float angle);
+void cvecMat4FXAxisRotation(CVECMat4F* mat, float angle);
 
-CVECMat4f* cvecMat4fCreateRotationYAxis(float angle);
+void cvecMat4FYAxisRotation(CVECMat4F* mat, float angle);
 
-CVECMat4f* cvecMat4fCreateRotationZAxis(float angle);
+void cvecMat4FZAxisRotation(CVECMat4F* mat, float angle);
 
-CVECMat4f* cvecMat4fCreateLookAt(CVECVec3f* eye, CVECVec3f* target, CVECVec3f* up);
+void cvecMat4FLookAt(CVECMat4F* mat, CVECVec3f* eye, CVECVec3f* target, CVECVec3f* up);
 
-void cvecMat4MatMult(CVECMat4f* mat0, CVECMat4f* mat1);
+void cvecMat4MatMult(CVECMat4F* mat0, CVECMat4F* mat1);
 
 #endif

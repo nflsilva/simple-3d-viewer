@@ -4,16 +4,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "s3v/context.h"
+
 /*!
  * Initializes the UI system.
- * @param window A pointer to the current GLFWwindow.
  */
-void s3vUIInit(GLFWwindow* window);
+void s3vUIInit();
 
 /*!
  * Updates and redraws all the UI components on the current window.
  */
-void s3vUIUpdate();
+void s3vUIRender(S3VContext* context);
 
 /*!
  * Shutsdown and cleansup the current UI system
