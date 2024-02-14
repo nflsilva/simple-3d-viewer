@@ -1,7 +1,11 @@
 #include "s3v/renderer.h"
 
 static S3VRenderer* renderer;
-static CVECMat4F* rot;
+static CVECVec3f* eye;
+static CVECVec3f* lookAt;
+static CVECVec3f* up;
+static CVECMat4F* xRotation;
+static CVECMat4F* yRotation;
 
 void s3vRendererInit() 
 {
@@ -11,19 +15,13 @@ void s3vRendererInit()
     renderer->projectionMatrix = cvecMat4FCreateIdentity();
     renderer->modelMatrix = cvecMat4FCreateIdentity();
     renderer->viewMatrix = cvecMat4FCreateIdentity();
+    xRotation = cvecMat4FCreateIdentity();
+    yRotation = cvecMat4FCreateIdentity();
 
-    CVECVec3f* eye = cvecVec3fCreate(2.5, 2.5, 2.5);
-    CVECVec3f* lookAt = cvecVec3fCreate(0, 0, 0);
-    CVECVec3f* up = cvecVec3fCreate(0, 1, 0);
+    eye = cvecVec3fCreate(0, 0, 35);
+    lookAt = cvecVec3fCreate(0, 0, 0);
+    up = cvecVec3fCreate(0, 1, 0);
     cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
-
-    free(eye);
-    free(lookAt);
-    free(up);
-
-    //rot = cvecMat4FXAxisRotation(1.0f);
-    //cvecMat4MatMult(rot, cvecMat4fCreateRotationYAxis(1.0f));
-    //cvecMat4MatMult(rot, cvecMat4fCreateRotationZAxis(1.0f));
 }
 
 void s3vRendererDestroy() 
@@ -44,9 +42,16 @@ void s3vRendererRender(S3VContext* context)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    //cvecMat4MatMult(renderer->modelMatrix, rot);
     float aspectRatio = context->windowHeight / (float)context->windowWidth;
     cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, 90, aspectRatio);
+
+    if(context->mouseButton)
+    {
+        //cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
+        cvecMat4FYAxisRotation(yRotation, -0.01 * context->mouseDeltaX);
+        cvecMat4MatMult(renderer->modelMatrix, xRotation);
+        cvecMat4MatMult(renderer->modelMatrix, yRotation);
+    }
 
     cvecMat4FSetIdentity(renderer->pvmMatrix);
     cvecMat4MatMult(renderer->pvmMatrix, renderer->modelMatrix);

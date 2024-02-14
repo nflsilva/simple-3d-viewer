@@ -1,5 +1,6 @@
 #include "s3v/window.h"
 #include "s3v/ui.h"
+#include "s3v/mouse.h"
 
 GLFWwindow* s3vWindow = NULL;
 
@@ -32,12 +33,13 @@ int s3vWindowOpen(int width, int height, const char* title)
     gladLoadGL();
     glfwSwapInterval(1);
 
-    const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
-    const GLubyte* version = glGetString(GL_VERSION); // version as a string
+    const GLubyte* renderer = glGetString(GL_RENDERER);     // get renderer string
+    const GLubyte* version = glGetString(GL_VERSION);       // version as a string
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
 
-    s3vUIInit(s3vWindow);
+    s3vUIInit();
+    s3vMouseInit();
 
     return S3V_SUCCESS;
 }
@@ -60,13 +62,13 @@ void s3vWindowRender(S3VContext* context)
     s3vUIRender(context);
 }
 
-void s3vWindowUpdate() 
+void s3vWindowUpdate(S3VContext* context) 
 {
-    glfwPollEvents();
     glfwSwapBuffers(s3vWindow);
-}
+    glfwPollEvents();
 
-void s3vWindowGetSize(int* width, int* height)
-{
-    glfwGetWindowSize(s3vWindow, width, height);
+    glfwGetWindowSize(s3vWindow, &context->windowWidth, &context->windowHeight);
+    
+    context->mouseButton = s3vMouseGetPressKey();
+    s3vMouseGetHoldDelta(&context->mouseDeltaX, &context->mouseDeltaY);
 }

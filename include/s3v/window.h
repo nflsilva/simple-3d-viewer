@@ -34,8 +34,6 @@ void s3vWindowRender(S3VContext* context);
 /*!
  *  Updates window context.
  */
-void s3vWindowUpdate();
-
-void s3vWindowGetSize(int* width, int* height);
+void s3vWindowUpdate(S3VContext* context);
 
 #endif

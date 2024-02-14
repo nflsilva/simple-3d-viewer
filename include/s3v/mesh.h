@@ -8,6 +8,7 @@
 
 #include "s3v/s3v.h"
 #include "cutil/list.h"
+#include "cutil/filebrowser.h"
 
 #define S3V_BATCH_MAX_ATTRIBUTES 20
 
@@ -40,5 +41,7 @@ void s3vMeshDestroy(S3VMesh* mesh);
 void s3vMeshBind(S3VMesh* mesh);
 
 void s3vMeshUnbind();
+
+void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh);
 
 #endif

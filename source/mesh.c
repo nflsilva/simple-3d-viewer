@@ -52,9 +52,11 @@ void s3vMeshAttributeDestroy(S3VMeshAttribute* attribute)
 S3VMesh* s3vMeshCreate()
 {
     S3VMesh* mesh = (S3VMesh*)malloc(sizeof(S3VMesh));
-    glGenVertexArrays(1, &mesh->glVAO);
+    mesh->glVAO = 0;
     mesh->nAttributes = 0;
     mesh->indexAttribute.glVBO = 0;
+    mesh->indexAttribute.count = 0;
+    glGenVertexArrays(1, &mesh->glVAO);
     return mesh;
 }
 
@@ -93,4 +95,63 @@ void s3vMeshBind(S3VMesh* mesh)
 void s3vMeshUnbind()
 {
     glBindVertexArray(0);
+}
+
+void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
+{
+    assert(mesh);
+    
+    FILE *file = fopen(directoryPath, "r");
+    
+    // check if the file was opened successfully
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    // buffer to store each line
+    char line[100];
+
+    int nVertices = 0;
+    int maxVertices = 1024 * 3;
+    float* vertices = (float*)malloc(sizeof(float) * maxVertices);
+
+    int nIndices = 0;
+    int maxIndices = 1024 * 3;
+    unsigned int* indices = (unsigned int*)malloc(sizeof(unsigned int) * maxIndices);
+
+    // read the file line by line
+    while (fgets(line, sizeof(line), file) != NULL) 
+    {
+        if(line[0] == 'v')
+        {
+            sscanf(line, "%*c %f %f %f", &vertices[nVertices], &vertices[nVertices + 1], &vertices[nVertices + 2]);
+            nVertices += 3;
+            if(nVertices == maxVertices)
+            {
+                maxVertices *= 2;
+                vertices = (float*)realloc(vertices, sizeof(float) * maxVertices * 3);
+            }
+
+        }
+        else if(line[0] == 'f')
+        {
+            sscanf(line, "%*c %d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", &indices[nIndices], &indices[nIndices + 1], &indices[nIndices + 2]);
+            for(int i = 0; i < 3; i++)
+                indices[nIndices + i]--;
+            
+            nIndices += 3;
+            if(nIndices == maxIndices)
+            {
+                maxIndices *= 2;
+                indices = (unsigned int*)realloc(indices, sizeof(unsigned int) * maxIndices * 3);
+            }
+        }
+    }
+
+    s3vMeshAttributeAdd(mesh, 3, nVertices, GL_FLOAT, vertices);
+    s3vMeshSetIndexAttribute(mesh, nIndices, indices);
+
+    // close the file
+    fclose(file);
 }
