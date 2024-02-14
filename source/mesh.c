@@ -20,11 +20,6 @@ void s3vMeshSetIndexAttribute(S3VMesh* mesh, unsigned int count, unsigned int* b
 
 void s3vMeshAttributeAdd(S3VMesh* mesh, unsigned int nComponents, unsigned int count, int type, void* buffer)
 {
-
-    // nComponents - 3 for x, y, z
-    // type - GL_FLOAT
-    // size - n of vertices
-
     assert(mesh);
 
     S3VMeshAttribute* attr = &mesh->attributes[mesh->nAttributes];
@@ -116,6 +111,10 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
     int maxVertices = 1024 * 3;
     float* vertices = (float*)malloc(sizeof(float) * maxVertices);
 
+    int nNormals = 0;
+    int maxNormals = 1024 * 3;
+    float* normals = (float*)malloc(sizeof(float) * maxNormals);
+
     int nIndices = 0;
     int maxIndices = 1024 * 3;
     unsigned int* indices = (unsigned int*)malloc(sizeof(unsigned int) * maxIndices);
@@ -123,9 +122,25 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
     // read the file line by line
     while (fgets(line, sizeof(line), file) != NULL) 
     {
-        if(line[0] == 'v')
+        if(line[0] == 'v' && line[1] == 'n')
         {
-            sscanf(line, "%*c %f %f %f", &vertices[nVertices], &vertices[nVertices + 1], &vertices[nVertices + 2]);
+            sscanf(line, "vn %f %f %f", 
+                &normals[nNormals], 
+                &normals[nNormals + 1], 
+                &normals[nNormals + 2]);
+            nNormals += 3;
+            if(nNormals == maxNormals)
+            {
+                maxNormals *= 2;
+                normals = (float*)realloc(normals, sizeof(float) * maxNormals * 3);
+            }
+        }
+        else if(line[0] == 'v')
+        {
+            sscanf(line, "v %f %f %f", 
+                &vertices[nVertices], 
+                &vertices[nVertices + 1], 
+                &vertices[nVertices + 2]);
             nVertices += 3;
             if(nVertices == maxVertices)
             {
@@ -136,7 +151,11 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
         }
         else if(line[0] == 'f')
         {
-            sscanf(line, "%*c %d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", &indices[nIndices], &indices[nIndices + 1], &indices[nIndices + 2]);
+            sscanf(line, "f %d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", 
+                &indices[nIndices], 
+                &indices[nIndices + 1], 
+                &indices[nIndices + 2]);
+
             for(int i = 0; i < 3; i++)
                 indices[nIndices + i]--;
             
@@ -148,10 +167,14 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
             }
         }
     }
-
-    s3vMeshAttributeAdd(mesh, 3, nVertices, GL_FLOAT, vertices);
-    s3vMeshSetIndexAttribute(mesh, nIndices, indices);
-
     // close the file
     fclose(file);
+
+    s3vMeshAttributeAdd(mesh, 3, nVertices, GL_FLOAT, vertices);
+    s3vMeshAttributeAdd(mesh, 3, nNormals, GL_FLOAT, normals);
+    s3vMeshSetIndexAttribute(mesh, nIndices, indices);
+
+    free(vertices);
+    free(indices);
+    free(normals);
 }

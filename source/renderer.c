@@ -18,7 +18,7 @@ void s3vRendererInit()
     xRotation = cvecMat4FCreateIdentity();
     yRotation = cvecMat4FCreateIdentity();
 
-    eye = cvecVec3fCreate(0, 0, 35);
+    eye = cvecVec3fCreate(0, 0, 50);
     lookAt = cvecVec3fCreate(0, 0, 0);
     up = cvecVec3fCreate(0, 1, 0);
     cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
@@ -47,7 +47,7 @@ void s3vRendererRender(S3VContext* context)
 
     if(context->mouseButton)
     {
-        //cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
+        cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
         cvecMat4FYAxisRotation(yRotation, -0.01 * context->mouseDeltaX);
         cvecMat4MatMult(renderer->modelMatrix, xRotation);
         cvecMat4MatMult(renderer->modelMatrix, yRotation);
@@ -60,6 +60,7 @@ void s3vRendererRender(S3VContext* context)
 
     s3vShaderBind(renderer->shader);
     s3vShaderSetUniformMat4F(renderer->shader, "uni_pvmMatrix", renderer->pvmMatrix->data);
+    s3vShaderSetUniformMat4F(renderer->shader, "uni_modelMatrix", renderer->modelMatrix->data);
     s3vMeshBind(renderer->mesh);
     glDrawElements(GL_TRIANGLES, renderer->mesh->indexAttribute.count, GL_UNSIGNED_INT, 0);
 
