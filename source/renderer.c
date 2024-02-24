@@ -1,15 +1,17 @@
 #include "s3v/renderer.h"
 
-static S3VRenderer* renderer;
+S3VRenderer* renderer;
 static CVECVec3f* eye;
 static CVECVec3f* lookAt;
 static CVECVec3f* up;
 static CVECMat4F* xRotation;
 static CVECMat4F* yRotation;
 
+
 void s3vRendererInit() 
 {
     renderer = (S3VRenderer*) malloc(sizeof(S3VRenderer));
+    renderer->mesh = NULL;
     renderer->shader = s3vShaderCreateDefaultShader();
     renderer->pvmMatrix = cvecMat4FCreateIdentity();
     renderer->projectionMatrix = cvecMat4FCreateIdentity();
@@ -42,8 +44,11 @@ void s3vRendererRender(S3VContext* context)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    if(!renderer->mesh)
+        return;
+
     float aspectRatio = context->windowHeight / (float)context->windowWidth;
-    cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, 90, aspectRatio);
+    cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, renderer->mesh->maxDistance * 2.5f, aspectRatio);
 
     if(context->mouseButton)
     {
@@ -62,7 +67,9 @@ void s3vRendererRender(S3VContext* context)
     s3vShaderSetUniformMat4F(renderer->shader, "uni_pvmMatrix", renderer->pvmMatrix->data);
     s3vShaderSetUniformMat4F(renderer->shader, "uni_modelMatrix", renderer->modelMatrix->data);
     s3vMeshBind(renderer->mesh);
-    glDrawElements(GL_TRIANGLES, renderer->mesh->indexAttribute.count, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, renderer->mesh->nElements, GL_UNSIGNED_INT, 0);
+
+    //printf("%d\n", renderer->mesh->nElements);
 
     s3vShaderUnbind();
 }

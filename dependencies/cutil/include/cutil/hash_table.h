@@ -7,7 +7,7 @@
 
 #include "cutil/list.h"
 
-#define _CUTIL_TABLE_SIZE 50000
+#define _CUTIL_TABLE_SIZE 1200000000
 
 #define CUTIL_NULL ((void*)-1)
 

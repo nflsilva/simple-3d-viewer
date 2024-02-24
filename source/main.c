@@ -14,55 +14,7 @@ int main()
 {
 
     assert(s3vWindowOpen(1280, 720, "s3v") == S3V_SUCCESS);
-
-    /*
-    float vertices[] = {
-        // Front face
-        -0.5f, -0.5f,  0.5f,    // 0
-         0.5f, -0.5f,  0.5f,    // 1
-         0.5f,  0.5f,  0.5f,    // 2
-        -0.5f,  0.5f,  0.5f,    // 3
-
-        // Back face
-        -0.5f, -0.5f, -0.5f,    // 4
-         0.5f, -0.5f, -0.5f,    // 5
-         0.5f,  0.5f, -0.5f,    // 6
-        -0.5f,  0.5f, -0.5f     // 7
-    };  
-    unsigned int indices[] = { 
-        // Front face
-        0, 1, 2,
-        2, 3, 0,
-
-        // Right face
-        1, 5, 6,
-        6, 2, 1,
-
-        // Back face
-        5, 4, 7,
-        7, 6, 5,
-
-        // Left face
-        4, 0, 3,
-        3, 7, 4,
-
-        // Bottom face
-        4, 5, 1,
-        1, 0, 4,
-
-        // Top face
-        3, 2, 6,
-        6, 7, 3
-    }; 
-    S3VMesh* mesh = s3vMeshCreate();
-    s3vMeshAttributeAdd(mesh, 3, 8, GL_FLOAT, vertices);
-    s3vMeshSetIndexAttribute(mesh, 6 * 3 * 2, indices);
-    */
-    S3VMesh* mesh = s3vMeshCreate();
-    s3vMeshCreateFromFile("/mnt/storage/w0/projects/simple-3d-viewer/assets/mesh/teddy.obj", mesh);
-
     s3vRendererInit();
-    s3vRendererRenderMesh(mesh);
 
     S3VContext context;
     while(!s3vWindowShouldClose()) 

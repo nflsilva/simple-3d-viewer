@@ -25736,6 +25736,16 @@ nk_slider_int(struct nk_context *ctx, int min, int *val, int max, int step)
     return ret;
 }
 
+NK_API nk_bool
+nk_slider_uint(struct nk_context *ctx, unsigned int min, unsigned int *val, unsigned int max, unsigned int step)
+{
+    int ret;
+    float value = (float)*val;
+    ret = nk_slider_float(ctx, (float)min, &value, (float)max, (float)step);
+    *val =  (unsigned int)value;
+    return ret;
+}
+
 
 
 

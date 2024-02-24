@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "cutil/hashTable.h"
+#include "cutil/hash_table.h"
 
 #define LIST_SIZE 10
 
@@ -20,12 +20,12 @@ int main()
 
     // test remove
     assert(*(int*)cutilHashTableRemoveElement(table, "abc") == elements[0]);
-    assert(cutilHashTableRemoveElement(table, "abc") == NULL);
+    assert(cutilHashTableRemoveElement(table, "abc") == CUTIL_NULL);
 
     // test insert
     assert(*(int*)cutilHashTableGetElement(table, "bca") == elements[1]);
     assert(*(int*)cutilHashTableGetElement(table, "cab") == elements[2]);
-    assert(cutilHashTableGetElement(table, "aaa") == NULL);
+    assert(cutilHashTableGetElement(table, "aaa") == CUTIL_NULL);
 
     // test update
     cutilHashTableAddElement(table, "cab", &elements[0]);

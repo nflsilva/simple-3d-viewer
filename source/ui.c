@@ -2,6 +2,7 @@
 
 
 #include "s3v/context.h"
+#include "s3v/renderer.h"
 #include "cutil/filebrowser.h"
 
 #define NK_INCLUDE_FIXED_TYPES
@@ -25,9 +26,11 @@
 static struct nk_glfw glfw = { 0 };
 static struct nk_context *ctx;
 static int width, height;
-extern GLFWwindow* s3vWindow;
 static int renderFileBrowser = 0;
 static CUTILFileBrowser* fileBrowser = NULL;
+
+extern GLFWwindow* s3vWindow;
+extern S3VRenderer* renderer;
 
 void s3vUIInit()
 {
@@ -93,9 +96,23 @@ void s3vUIRenderToolbar()
             }
             nk_menu_end(ctx);
         }
-
     }
     nk_end(ctx);
+
+    if(!renderer->mesh) return;
+
+    if (nk_begin(ctx, "files", nk_rect(25, 25, 500, 30), 
+        NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_MOVABLE))
+    {
+        nk_layout_row_dynamic(ctx, 30, 1);
+
+        nk_slider_uint(ctx, 1, &renderer->mesh->nElements, renderer->mesh->maxElements, 1);
+
+        nk_layout_row_dynamic(ctx, 30, 1);
+    }
+    nk_end(ctx);
+
+    
 }
 
 void s3vUIRenderFilebrowser()
@@ -126,6 +143,9 @@ void s3vUIRenderFilebrowser()
                     if(file) 
                     {
                         renderFileBrowser = 0;
+                        S3VMesh* mesh = s3vMeshCreate();
+                        s3vMeshCreateFromFile(file, mesh);
+                        s3vRendererRenderMesh(mesh);
                     }
                 }
 

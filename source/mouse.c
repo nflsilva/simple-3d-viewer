@@ -22,13 +22,13 @@ static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) 
 {
-    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    if(button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
     {
         keyPressed = 1;
         pressX = -1;
         pressY = -1;
     }
-    else if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+    else if(button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
     {
         keyPressed = 0;
         deltaX = 0;

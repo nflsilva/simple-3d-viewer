@@ -9,6 +9,19 @@ static void error_callback(int error, const char* description)
     printf("Error: %d: %s\n", error, description);
 }
 
+
+void GLAPIENTRY DebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam){
+    // Print the debug message
+    printf("OpenGL Debug Message:\n");
+    printf("  Source: %u\n", source);
+    printf("  Type: %u\n", type);
+    printf("  ID: %u\n", id);
+    printf("  Severity: %u\n", severity);
+    printf("  Message: %s\n", message);
+    printf("-----------------------------\n");
+}
+
+
 int s3vWindowOpen(int width, int height, const char* title) 
 {
     glfwSetErrorCallback(error_callback);
@@ -21,6 +34,9 @@ int s3vWindowOpen(int width, int height, const char* title)
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+
     s3vWindow = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!s3vWindow)
     {
@@ -37,6 +53,9 @@ int s3vWindowOpen(int width, int height, const char* title)
     const GLubyte* version = glGetString(GL_VERSION);       // version as a string
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
+
+    glEnable(GL_DEBUG_OUTPUT);
+    //glDebugMessageCallback(DebugCallback, NULL);
 
     s3vUIInit();
     s3vMouseInit();

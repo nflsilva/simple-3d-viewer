@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <glad/glad.h>
 
-#include "cutil/hashTable.h"
+#include "cutil/hash_table.h"
 #include "cutil/list.h"
 #include "cutil/filebrowser.h"
 #include "s3v/s3v.h"

@@ -1,4 +1,4 @@
-#include "cutil/hashTable.h"
+#include "cutil/hash_table.h"
 
 // http://www.cse.yorku.ca/~oz/hash.html
 unsigned long djb2Hash(const char *str)
@@ -14,7 +14,8 @@ CUTILHashTableBucketChainNode* createBucketChainNode(const char* key, void* data
 {
     CUTILHashTableBucketChainNode* newNode = (CUTILHashTableBucketChainNode*)malloc(sizeof(CUTILHashTableBucketChainNode));
     newNode->data = data;
-    newNode->key = key;
+    newNode->key = (char*)malloc(sizeof(char) * strlen(key) + 1);
+    strcpy(newNode->key, key);
     return newNode;
 }
 
@@ -84,9 +85,6 @@ void* cutilHashTableGetElement(CUTILHashTable* hashTable, const char* key)
     // key doesn't exist
     if(bucket->chain == NULL || bucket->chain->size == 0) return CUTIL_NULL;
 
-    // key has no collisions
-    if(bucket->chain->size == 1) return ((CUTILHashTableBucketChainNode*)cutilListGetElement(bucket->chain, 0))->data;
-
     // find the key on chain
     for(int i = 0; i < bucket->chain->size; i++) 
     {
@@ -104,7 +102,7 @@ void* cutilHashTableRemoveElement(CUTILHashTable* hashTable, const char* key)
     CUTILHashTableBucket* bucket = getBucketForKey(hashTable, key);
 
     // key doesn't exist
-    if(bucket->chain == CUTIL_NULL || bucket->chain->size == 0) return CUTIL_NULL;
+    if(bucket->chain == NULL || bucket->chain->size == 0) return CUTIL_NULL;
 
     // check if this was the last element on the chain and updates bucket if so
     if(bucket->chain->size == 1) {

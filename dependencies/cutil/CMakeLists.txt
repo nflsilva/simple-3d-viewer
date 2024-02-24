@@ -3,11 +3,12 @@ cmake_minimum_required(VERSION 3.26.4)
 project(cutil)
 
 set(CUTIL_SOURCES
-  source/hashTable.c
+  source/hash_table.c
   source/list.c
   source/filebrowser.c
   source/math.c
   source/sort.c
+  source/vector.c
 )
 
 include_directories(include)

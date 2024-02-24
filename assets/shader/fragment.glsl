@@ -4,10 +4,10 @@ in vec3 f_normal;
 
 out vec4 FragColor;
 
-vec3 lightVector = vec3(1f);
+vec3 lightVector = vec3(-1f);
 vec4 lightColor = vec4(1f);
 vec4 materialColor = vec4(1f);
-float ambientCoefficient = 0.2f;
+float ambientCoefficient = 0.5f;
 
 vec4 processLight(float dotNormalLight){
     float diffuseComponent = max(dotNormalLight, 0.0);
