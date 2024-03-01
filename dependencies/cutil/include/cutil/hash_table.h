@@ -7,7 +7,7 @@
 
 #include "cutil/list.h"
 
-#define _CUTIL_TABLE_SIZE 1200000000
+#define _CUTIL_TABLE_SIZE 1024
 
 #define CUTIL_NULL ((void*)-1)
 
@@ -17,7 +17,7 @@
  * @param key The data for this item
  */
 typedef struct CUTILHashTableBucketChainNode {
-    const char* key;
+    char* key;
     void* data;
 } CUTILHashTableBucketChainNode;
 

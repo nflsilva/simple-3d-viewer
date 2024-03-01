@@ -41,7 +41,16 @@ void cutilHashTableDestroy(CUTILHashTable* hashTable, int cleanData)
     {
         CUTILHashTableBucket* bucket = &hashTable->buckets[i];
         if(bucket->chain != NULL) 
+        {
+            CUTILListNode* node = bucket->chain->head;
+            while(node != NULL)
+            {
+                CUTILHashTableBucketChainNode* cn = (CUTILHashTableBucketChainNode*)node->data;
+                free(cn->key);
+                node = node->next;
+            }
             cutilListDestroy(bucket->chain, cleanData);
+        }
     }
     free(hashTable->buckets);
     free(hashTable);
@@ -108,6 +117,7 @@ void* cutilHashTableRemoveElement(CUTILHashTable* hashTable, const char* key)
     if(bucket->chain->size == 1) {
         CUTILHashTableBucketChainNode* node = cutilListGetElement(bucket->chain, 0);
         void* dataPtr = node->data;
+        free(node->key);
         cutilListDestroy(bucket->chain, 0);
         bucket->chain = NULL;
         free(node);
