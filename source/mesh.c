@@ -120,7 +120,7 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
     CUTILVector* normals = cutilVectorCreate(1024 * 3, sizeof(float));
     CUTILVector* uvs = cutilVectorCreate(1024 * 2, sizeof(float));
     CUTILVector* faces = cutilVectorCreate(1024 * 4, sizeof(int));
-    CUTILHashTable* indexPerVertix = cutilHashTableCreate();
+    CUTILHashTable* indexPerVertex = cutilHashTableCreate();
     
     // read the file line by line
     while (fgets(line, sizeof(line), file) != NULL) 
@@ -154,13 +154,13 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
 
                 faceStart += strlen(vertixId) + 1;
 
-                int* vertixIndexPtr = cutilHashTableGetElement(indexPerVertix, vertixId);
+                int* vertixIndexPtr = cutilHashTableGetElement(indexPerVertex, vertixId);
                 if(vertixIndexPtr == CUTIL_NULL) 
                 {
                     // TODO: i need to remove the need for this malloc...
                     vertixIndexPtr = malloc(sizeof(unsigned int));
                     *vertixIndexPtr = nVertices;
-                    cutilHashTableAddElement(indexPerVertix, vertixId, (void*)vertixIndexPtr);
+                    cutilHashTableAddElement(indexPerVertex, vertixId, (void*)vertixIndexPtr);
                     nVertices++;
                 }
 
@@ -262,8 +262,26 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
 
     s3vMeshInit(mesh, vertices, nVertices, indices, nElements);
 
+    free(vertices);
+    free(indices);
+
     cutilVectorDestroy(positions);
     cutilVectorDestroy(normals);
     cutilVectorDestroy(uvs);
     cutilVectorDestroy(faces);
+
+    for(int i = 0; i < _CUTIL_TABLE_SIZE; i++)
+    {
+        CUTILHashTableBucket* bucket = &indexPerVertex->buckets[i];
+        if(!bucket->chain) continue;
+
+        CUTILListNode* node = bucket->chain->head;
+        while(node != NULL)
+        {
+            CUTILHashTableBucketChainNode* cn = (CUTILHashTableBucketChainNode*)node->data;
+            node = node->next;
+            free(cn->data);
+        }
+    }
+    cutilHashTableDestroy(indexPerVertex);
 }

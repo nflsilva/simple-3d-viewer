@@ -61,16 +61,35 @@ void s3vShaderDestroy(S3VShader* shader)
     assert(shader->uniformLocations);
 
     s3vShaderUnbind(shader);
+    glDeleteProgram(shader->programId);
 
-    for(int i = 0; i < shader->shaderList->size; i++)
+    int* glShaderPtr = (int*)cutilListPopElement(shader->shaderList);
+    while(glShaderPtr != NULL)
     {
-        int glShader = *(int*)cutilListPopElement(shader->shaderList);
+        int glShader = *glShaderPtr;
         glDetachShader(shader->programId, glShader);
         glDeleteShader(glShader);
+
+        free(glShaderPtr);
+        glShaderPtr = (int*)cutilListPopElement(shader->shaderList);
     }
-    glDeleteProgram(shader->programId);
-    cutilListDestroy(shader->shaderList, S3V_FALSE);
-    cutilHashTableDestroy(shader->uniformLocations, S3V_FALSE);
+    cutilListDestroy(shader->shaderList);
+
+    for(int i = 0; i < _CUTIL_TABLE_SIZE; i++)
+    {
+        CUTILHashTableBucket* bucket = &shader->uniformLocations->buckets[i];
+        if(!bucket->chain) continue;
+
+        CUTILListNode* node = bucket->chain->head;
+        while(node != NULL)
+        {
+            CUTILHashTableBucketChainNode* cn = (CUTILHashTableBucketChainNode*)node->data;
+            node = node->next;
+            free(cn->data);
+        }
+    }
+    cutilHashTableDestroy(shader->uniformLocations);
+    
     free(shader);
 }
 

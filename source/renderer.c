@@ -30,7 +30,13 @@ void s3vRendererDestroy()
 {
     assert(renderer);
     s3vShaderDestroy(renderer->shader);
-    s3vMeshDestroy(renderer->mesh);
+    if(renderer->mesh)
+        s3vMeshDestroy(renderer->mesh);
+
+    free(renderer->pvmMatrix);
+    free(renderer->projectionMatrix);
+    free(renderer->modelMatrix);
+    free(renderer->viewMatrix);
     free(renderer);
 }
 

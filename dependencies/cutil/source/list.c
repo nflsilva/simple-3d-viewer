@@ -9,7 +9,7 @@ CUTILList* cutilListCreate()
     return newList;
 }
 
-void cutilListDestroy(CUTILList* list, int cleanData)
+void cutilListDestroy(CUTILList* list)
 {
     if(!list) return;
 
@@ -17,8 +17,6 @@ void cutilListDestroy(CUTILList* list, int cleanData)
     while (currentNode != NULL) 
     {
         CUTILListNode* nextNode = currentNode->next;
-        if(cleanData)
-            free(currentNode->data);
         free(currentNode);
         currentNode = nextNode;
     }

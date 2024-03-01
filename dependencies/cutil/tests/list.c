@@ -9,7 +9,7 @@ int main()
 {
     
     // setup elements array
-    int elements[LIST_SIZE];
+    int* elements = malloc(sizeof(int) * LIST_SIZE);
     for(int i = 0; i < LIST_SIZE; i++) 
         elements[i] = i;
 
@@ -37,6 +37,7 @@ int main()
     assert(list->size == LIST_SIZE - 2);
 
     // cleanup
-    cutilListDestroy(list, 0);
+    cutilListDestroy(list);
+    free(elements);
     exit(EXIT_SUCCESS);
 }

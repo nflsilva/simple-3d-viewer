@@ -4,11 +4,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*!
+ * Represents a node on a list.
+ * @param data A pointer to the data to be stored in list
+ * @param next A pointer to the next list element
+ */
 typedef struct CUTILListNode {
     void* data;
     struct CUTILListNode* next;
 } CUTILListNode;
 
+/*!
+ * Represents a list of elements.
+ * @param size The number of elements on this list
+ * @param head A pointer to the fist list element
+ * @param tail A pointer to the last list element
+ */
 typedef struct CUTILList {
     int size;
     CUTILListNode* head;
@@ -27,7 +38,7 @@ CUTILList* cutilListCreate();
  * @param cleanData Set to anything other than `0` to free all the stored data. `0` otherwise.
  * @returns A pointer to the list to destroy.
  */
-void cutilListDestroy(CUTILList* list, int cleanData);
+void cutilListDestroy(CUTILList* list);
 
 /*!
  * Adds new element to the end of the list.

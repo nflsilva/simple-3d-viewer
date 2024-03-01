@@ -8,7 +8,7 @@
 int main() 
 {
     // setup elements array
-    int elements[LIST_SIZE];
+    int* elements = (int*)malloc(sizeof(int) * LIST_SIZE);
     for(int i = 0; i < LIST_SIZE; i++) 
         elements[i] = i;
 
@@ -32,6 +32,8 @@ int main()
     assert(*(int*)cutilHashTableGetElement(table, "cab") == elements[0]);
 
     // cleanup
-    cutilHashTableDestroy(table, 1);
+    cutilHashTableDestroy(table);
+    free(elements);
+    
     exit(EXIT_SUCCESS);
 }

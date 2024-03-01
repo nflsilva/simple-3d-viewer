@@ -7,7 +7,7 @@
 
 #include "cutil/list.h"
 
-#define _CUTIL_TABLE_SIZE 1024
+#define _CUTIL_TABLE_SIZE 1000000
 
 #define CUTIL_NULL ((void*)-1)
 
@@ -48,7 +48,7 @@ CUTILHashTable* cutilHashTableCreate();
  * @param hashTable A pointer to the hash table.
  * @param cleanData Set to anything other than `0` to free all the stored data. `0` otherwise.
  */
-void cutilHashTableDestroy(CUTILHashTable* hashTable, int cleanData);
+void cutilHashTableDestroy(CUTILHashTable* hashTable);
 
 /*!
  * Adds new element to the list.

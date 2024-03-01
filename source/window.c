@@ -9,19 +9,6 @@ static void error_callback(int error, const char* description)
     printf("Error: %d: %s\n", error, description);
 }
 
-
-void GLAPIENTRY DebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam){
-    // Print the debug message
-    printf("OpenGL Debug Message:\n");
-    printf("  Source: %u\n", source);
-    printf("  Type: %u\n", type);
-    printf("  ID: %u\n", id);
-    printf("  Severity: %u\n", severity);
-    printf("  Message: %s\n", message);
-    printf("-----------------------------\n");
-}
-
-
 int s3vWindowOpen(int width, int height, const char* title) 
 {
     glfwSetErrorCallback(error_callback);
@@ -54,9 +41,6 @@ int s3vWindowOpen(int width, int height, const char* title)
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
 
-    glEnable(GL_DEBUG_OUTPUT);
-    //glDebugMessageCallback(DebugCallback, NULL);
-
     s3vUIInit();
     s3vMouseInit();
 
@@ -72,7 +56,7 @@ int s3vWindowShouldClose()
 void s3vWindowClose() 
 {
     if(!s3vWindow) return;
-    s3vUIFinish();
+    //s3vUIFinish();
     glfwDestroyWindow(s3vWindow);
 }
 
