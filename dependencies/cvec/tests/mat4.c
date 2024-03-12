@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "cvec/mat4.h"
+#include "cvec/vec3.h"
 
 int main() 
 {
@@ -39,7 +40,31 @@ int main()
         for(int c = 0; c < 4; c++)
             assert(mat0->data[r][c] == expected[r * 4 + c]);
 
+    mat0->data[0][0] = 2;
+    mat0->data[0][1] = -1;
+    mat0->data[0][2] = 3;
+    mat0->data[0][3] = 5;
+
+    mat0->data[1][0] = 1;
+    mat0->data[1][1] = 3;
+    mat0->data[1][2] = 0;
+    mat0->data[1][3] = 4;
+    
+    mat0->data[2][0] = 3;
+    mat0->data[2][1] = 0;
+    mat0->data[2][2] = -1;
+    mat0->data[2][3] = -2;
+
+    mat0->data[3][0] = 0;
+    mat0->data[3][1] = 0;
+    mat0->data[3][2] = 0;
+    mat0->data[3][3] = 1;
+
+    CVECVec3f* vec = cvecVec3fCreate(2, 0, -1);
+    cvecMat4Vec3Mult(mat0, vec);
+
     free(mat0);
     free(mat1);
+    free(vec);
     exit(EXIT_SUCCESS);
 }

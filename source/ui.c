@@ -22,6 +22,7 @@
 #define MAX_ELEMENT_BUFFER 128 * 1024
 
 #define TOP_TOOLBAR_HEIGHT 30
+#define SIDE_TOOLBAR_WIDTH 150
 
 static struct nk_glfw glfw = { 0 };
 static struct nk_context *ctx;
@@ -49,9 +50,13 @@ void s3vUIRender(S3VContext* context)
     height = context->windowHeight;
     nk_glfw3_new_frame(&glfw);
 
-    s3vUIRenderToolbar();
+    s3vUIRenderTopToolbar();
+    s3vUIRenderSideToolbar();
+
     if(renderFileBrowser)
         s3vUIRenderFilebrowser();
+
+
 
     nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 }
@@ -61,9 +66,9 @@ void s3vUIFinish()
     nk_glfw3_shutdown(&glfw);
 }
 
-void s3vUIRenderToolbar()
+void s3vUIRenderTopToolbar()
 {
-    if (nk_begin(ctx, "toolbar", nk_rect(0, 0, width, TOP_TOOLBAR_HEIGHT), NK_WINDOW_NO_SCROLLBAR))
+    if (nk_begin(ctx, "top-tool-bar", nk_rect(0, 0, width, TOP_TOOLBAR_HEIGHT), NK_WINDOW_NO_SCROLLBAR))
     {
         struct nk_vec2 menuSize = nk_vec2(125, 200);
 
@@ -80,10 +85,6 @@ void s3vUIRenderToolbar()
                 if(!renderFileBrowser)
                     renderFileBrowser = 1;
             }
-            if (nk_menu_item_label(ctx, "Open material", NK_TEXT_LEFT)) 
-            {
-
-            }
             nk_menu_end(ctx);
         }
         
@@ -99,6 +100,7 @@ void s3vUIRenderToolbar()
     }
     nk_end(ctx);
 
+/*
     if(!renderer->mesh) return;
 
     if (nk_begin(ctx, "files", nk_rect(25, 25, 500, 30), 
@@ -111,8 +113,32 @@ void s3vUIRenderToolbar()
         nk_layout_row_dynamic(ctx, 30, 1);
     }
     nk_end(ctx);
-
+*/
     
+}
+
+void s3vUIRenderSideToolbar()
+{
+    if (nk_begin(ctx, "side-tool-bar", nk_rect(width - SIDE_TOOLBAR_WIDTH, TOP_TOOLBAR_HEIGHT, SIDE_TOOLBAR_WIDTH, height), NK_WINDOW_NO_SCROLLBAR))
+    {
+
+        // fixed widget pixel width
+        nk_layout_row_static(ctx, 30, 80, 1);
+        if (nk_button_label(ctx, "button")) {
+            // event handling
+        }
+        // custom widget pixel width
+        nk_layout_row_begin(ctx, NK_STATIC, 30, 2);
+        {
+            nk_layout_row_push(ctx, 50);
+            nk_label(ctx, "Volume:", NK_TEXT_LEFT);
+            //nk_layout_row_push(ctx, 110);
+            //nk_slider_float(&ctx, 0, &value, 1.0f, 0.1f);
+        }
+        nk_layout_row_end(ctx);
+
+    }
+    nk_end(ctx);
 }
 
 void s3vUIRenderFilebrowser()

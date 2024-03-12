@@ -7,7 +7,6 @@ static CVECVec3f* up;
 static CVECMat4F* xRotation;
 static CVECMat4F* yRotation;
 
-
 void s3vRendererInit() 
 {
     renderer = (S3VRenderer*) malloc(sizeof(S3VRenderer));
@@ -20,7 +19,7 @@ void s3vRendererInit()
     xRotation = cvecMat4FCreateIdentity();
     yRotation = cvecMat4FCreateIdentity();
 
-    eye = cvecVec3fCreate(0, 0, 50);
+    eye = cvecVec3fCreate(0, 20, 50);
     lookAt = cvecVec3fCreate(0, 0, 0);
     up = cvecVec3fCreate(0, 1, 0);
     cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
@@ -58,10 +57,16 @@ void s3vRendererRender(S3VContext* context)
 
     if(context->mouseButton)
     {
-        cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
+
         cvecMat4FYAxisRotation(yRotation, -0.01 * context->mouseDeltaX);
-        cvecMat4MatMult(renderer->modelMatrix, xRotation);
-        cvecMat4MatMult(renderer->modelMatrix, yRotation);
+        cvecMat4Vec3Mult(yRotation, eye);
+        cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
+        //cvecMat4MatMult(renderer->viewMatrix, yRotation);
+
+        //cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
+        //cvecMat4MatMult(renderer->modelMatrix, xRotation);
+
+
     }
 
     cvecMat4FSetIdentity(renderer->pvmMatrix);
@@ -83,5 +88,7 @@ void s3vRendererRender(S3VContext* context)
 void s3vRendererRenderMesh(S3VMesh* mesh) 
 {
     assert(renderer);
+    if(renderer->mesh)
+        s3vMeshDestroy(renderer->mesh);
     renderer->mesh = mesh;
 }

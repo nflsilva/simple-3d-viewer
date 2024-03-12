@@ -61,4 +61,6 @@ void cvecMat4FLookAt(CVECMat4F* mat, CVECVec3f* eye, CVECVec3f* target, CVECVec3
 
 void cvecMat4MatMult(CVECMat4F* mat0, CVECMat4F* mat1);
 
+void cvecMat4Vec3Mult(CVECMat4F* mat0, CVECVec3f* eye);
+
 #endif

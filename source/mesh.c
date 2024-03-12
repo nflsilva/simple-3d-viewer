@@ -199,6 +199,7 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
     // close the file
     fclose(file);
 
+    printf("done read file\n");
     unsigned int nElements = faces->count / 4;
     S3VMeshVertex* vertices = (S3VMeshVertex*)malloc(sizeof(S3VMeshVertex) * nVertices);
     unsigned int* indices = (unsigned int*)malloc(sizeof(unsigned int) * nElements);
@@ -244,21 +245,6 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
         }
 
     }
-
-    for(unsigned int i = 0; i < nVertices; i++)
-    {
-        S3VMeshVertex v = vertices[i];
-        //printf("%d %f %f %f\n", i, v.position[0], v.position[1], v.position[2]);
-        //printf("%f\n", v->normal[0]);
-    }
-    printf("%d\n", duplicated);
-
-    for(unsigned int i = 0; i < 220; i++)
-    {
-        S3VMeshVertex v = vertices[indices[i]];
-        //printf("%d %d %f %f %f\n", i, indices[i], v.position[0], v.position[1], v.position[2]);
-    }
-    printf("\n");
 
     s3vMeshInit(mesh, vertices, nVertices, indices, nElements);
 

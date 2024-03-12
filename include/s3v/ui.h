@@ -24,7 +24,12 @@ void s3vUIFinish();
 /*!
  * Renders a toolbar on the top of the screen
  */
-void s3vUIRenderToolbar();
+void s3vUIRenderTopToolbar();
+
+/*!
+ * Renders a toolbar on the left of the screen
+ */
+void s3vUIRenderSideToolbar();
 
 /*!
  * Renders a file browser popup

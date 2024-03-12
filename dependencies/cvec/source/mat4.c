@@ -122,3 +122,21 @@ void cvecMat4MatMult(CVECMat4F* mat0, CVECMat4F* mat1)
     }
     memcpy(mat0->data, temp, sizeof(temp));
 }
+
+void cvecMat4Vec3Mult(CVECMat4F* mat, CVECVec3f* vec)
+{
+    float temp[4] = { 0 };
+    int ti = 0;
+    for(int r = 0; r < 4; r++)
+    {
+        temp[ti] += mat->data[r][0] * vec->x;
+        temp[ti] += mat->data[r][1] * vec->y;
+        temp[ti] += mat->data[r][2] * vec->z;
+        temp[ti] += mat->data[r][3] * 1;
+        ti++;
+    }
+    vec->x = temp[0];
+    vec->y = temp[1];
+    vec->z = temp[2];
+
+}
