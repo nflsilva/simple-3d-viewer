@@ -5,6 +5,7 @@ typedef struct S3VContext {
     int windowWidth, windowHeight;
     int mouseX, mouseY, mouseButton;
     float mouseDeltaX, mouseDeltaY; 
+    int framesPerSecond;
 } S3VContext;
 
 #endif

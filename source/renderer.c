@@ -53,11 +53,10 @@ void s3vRendererRender(S3VContext* context)
         return;
 
     float aspectRatio = context->windowHeight / (float)context->windowWidth;
-    cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, renderer->mesh->maxDistance * 2.5f, aspectRatio);
+    cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, renderer->mesh->maxDistance * 3.0f, aspectRatio);
 
     if(context->mouseButton)
     {
-
         cvecMat4FYAxisRotation(yRotation, -0.01 * context->mouseDeltaX);
         cvecMat4Vec3Mult(yRotation, eye);
         cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
@@ -65,8 +64,6 @@ void s3vRendererRender(S3VContext* context)
 
         //cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
         //cvecMat4MatMult(renderer->modelMatrix, xRotation);
-
-
     }
 
     cvecMat4FSetIdentity(renderer->pvmMatrix);

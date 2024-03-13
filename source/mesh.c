@@ -44,8 +44,6 @@ void s3vMeshInit(S3VMesh* mesh, S3VMeshVertex* vertices, int nVertices, unsigned
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-
 }
 
 void s3vMeshDestroy(S3VMesh* mesh)

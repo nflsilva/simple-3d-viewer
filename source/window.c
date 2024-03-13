@@ -2,6 +2,8 @@
 #include "s3v/ui.h"
 #include "s3v/mouse.h"
 
+static int frameCount = 0;
+static double previousTime = 0;
 GLFWwindow* s3vWindow = NULL;
 
 static void error_callback(int error, const char* description)
@@ -60,9 +62,21 @@ void s3vWindowClose()
     glfwDestroyWindow(s3vWindow);
 }
 
+void s3vWindowUpdateFPS(S3VContext* context)
+{
+    double currentTime = glfwGetTime();
+    frameCount++;
+    if (currentTime - previousTime >= 1.0) {
+        context->framesPerSecond = frameCount;
+        frameCount = 0;
+        previousTime = currentTime;
+    }
+}
+
 void s3vWindowRender(S3VContext* context)
 {
     s3vUIRender(context);
+    s3vWindowUpdateFPS(context);
 }
 
 void s3vWindowUpdate(S3VContext* context) 
