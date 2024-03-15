@@ -75,9 +75,8 @@ void s3vRendererRender(S3VContext* context)
     s3vShaderSetUniformMat4F(renderer->shader, "uni_pvmMatrix", renderer->pvmMatrix->data);
     s3vShaderSetUniformMat4F(renderer->shader, "uni_modelMatrix", renderer->modelMatrix->data);
     s3vMeshBind(renderer->mesh);
-    glDrawElements(GL_TRIANGLES, renderer->mesh->nElements, GL_UNSIGNED_INT, 0);
 
-    //printf("%d\n", renderer->mesh->nElements);
+    glDrawElements(GL_TRIANGLES, renderer->mesh->nElements, GL_UNSIGNED_INT, 0);
 
     s3vShaderUnbind();
 }

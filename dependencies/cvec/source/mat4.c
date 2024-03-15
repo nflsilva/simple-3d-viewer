@@ -31,12 +31,12 @@ void cvecMat4FPerspective(CVECMat4F* mat, float near, float far, float fieldOfVi
     mat->data[3][2] = near * far * range;
 }
 
-void cvecMat4FTranslation(CVECMat4F* mat, float dx, float dy, float dz)
+void cvecMat4FTranslation(CVECMat4F* mat, float tx, float ty, float tz)
 {
     assert(mat);
-    mat->data[3][0] = dx;
-    mat->data[3][1] = dy;
-    mat->data[3][2] = dz;
+    mat->data[3][0] = tx;
+    mat->data[3][1] = ty;
+    mat->data[3][2] = tz;
 }
 
 void cvecMat4FXAxisRotation(CVECMat4F* mat, float angle)
@@ -138,5 +138,4 @@ void cvecMat4Vec3Mult(CVECMat4F* mat, CVECVec3f* vec)
     vec->x = temp[0];
     vec->y = temp[1];
     vec->z = temp[2];
-
 }

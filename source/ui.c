@@ -28,7 +28,7 @@ static struct nk_glfw glfw = { 0 };
 static struct nk_context *ctx;
 static int width, height;
 static int renderFileBrowser = 0;
-static char buffer[25] = { '\0' };
+static char fpsBuffer[25] = { '\0' };
 static CUTILFileBrowser* fileBrowser = NULL;
 
 extern GLFWwindow* s3vWindow;
@@ -102,8 +102,8 @@ void s3vUIRenderTopToolbar(S3VContext* context)
     if (nk_begin(ctx, "top-fps", nk_rect(0, TOP_TOOLBAR_HEIGHT, width, TOP_TOOLBAR_HEIGHT), NK_WINDOW_NO_SCROLLBAR))
     {
         nk_layout_row_static(ctx, TOP_TOOLBAR_HEIGHT, width, 2);
-        sprintf(buffer, "FPS: %d", context->framesPerSecond);
-        nk_label(ctx, buffer, NK_TEXT_RIGHT);
+        sprintf(fpsBuffer, "FPS: %d", context->framesPerSecond);
+        nk_label(ctx, fpsBuffer, NK_TEXT_RIGHT);
     }
     nk_end(ctx);
 

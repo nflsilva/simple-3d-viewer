@@ -88,4 +88,5 @@ void s3vWindowUpdate(S3VContext* context)
     
     context->mouseButton = s3vMouseGetPressKey();
     s3vMouseGetHoldDelta(&context->mouseDeltaX, &context->mouseDeltaY);
+    context->renderingOptions.drawWireframe = 1;
 }

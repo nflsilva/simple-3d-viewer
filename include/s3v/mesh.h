@@ -46,6 +46,7 @@ typedef struct S3VMesh {
 
 /*!
  * Creates a mesh in ram
+ * @return a pointer to the new mesh
  */
 S3VMesh* s3vMeshCreate();
 
