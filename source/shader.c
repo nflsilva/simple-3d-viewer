@@ -215,9 +215,9 @@ int s3vShaderSetUniformMat4F(S3VShader* shader, const char* name, float values[4
 
 S3VShader* s3vShaderCreateDefaultShader()
 {
-    const char* vertexShaderCode = cutilFileBrowserLoadFile("/mnt/storage/w0/projects/simple-3d-viewer/assets/shader/vertex.glsl");
+    const char* vertexShaderCode = cutilFileBrowserLoadFile("../assets/shader/vertex.glsl");
     if(!vertexShaderCode) return NULL;
-    const char* fragmentShaderCode = cutilFileBrowserLoadFile("/mnt/storage/w0/projects/simple-3d-viewer/assets/shader/fragment.glsl");
+    const char* fragmentShaderCode = cutilFileBrowserLoadFile("../assets/shader/fragment.glsl");
     if(!fragmentShaderCode) return NULL;
     
     S3VShader* shader = s3vShaderCreate(&vertexShaderCode, &fragmentShaderCode);
