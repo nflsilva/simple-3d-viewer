@@ -11,4 +11,11 @@
  */
 float cutilMathClipf(float value, float max, float min);
 
+/*!
+ * Returns the absolute value `float`.
+ * @param value the original value
+ * @return The absolute value
+ */
+float cutilMathAbs(float value);
+
 #endif

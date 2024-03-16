@@ -4,6 +4,7 @@
 #include <assert.h>
 
 #include "cvec/mat4.h"
+#include "cutil/math.h"
 #include "s3v/context.h"
 #include "s3v/mesh.h"
 #include "s3v/shader.h"

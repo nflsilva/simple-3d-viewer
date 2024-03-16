@@ -1,10 +1,11 @@
 #include "cutil/filebrowser.h"
 
-CUTILFileBrowser* cutilFileBrowserInit(const char* directoryPath)
+CUTILFileBrowser* cutilFileBrowserInit(const char* directoryPath, const char* fileExtension)
 {
     CUTILFileBrowser* browser = (CUTILFileBrowser*) malloc(sizeof(CUTILFileBrowser));
     browser->directoryContentsSize = 0;
     strcpy(browser->directoryPathBuffer, directoryPath);
+    sprintf(browser->fileExtensionBuffer, ".%s", fileExtension);
     cutilFileBrowserLoadDirectoryContents(browser);
     return browser;
 }
@@ -24,7 +25,7 @@ char* cutilFileBrowserSelectItem(CUTILFileBrowser* fileBrowser, int itemIndex)
 
     if(item->isDirectory)
     {
-        // TODO: we should create a cross-platform component to deal with
+        // TODO: I should create a cross-platform component to deal with
         // file paths
         strcat(fileBrowser->directoryPathBuffer, "/");
         strcat(fileBrowser->directoryPathBuffer, item->name);
@@ -47,6 +48,17 @@ static int filesystemItemComparator(const void* a, const void* b)
     return strcmp(((CUTILFilesystemItem*)a)->name, ((CUTILFilesystemItem*)b)->name);
 }
 
+static int fileHasExtension(CUTILFileBrowser* fileBrowser, char* itemName)
+{
+    int fileNameLength = strlen(itemName);
+    int extensionLength = strlen(fileBrowser->fileExtensionBuffer);
+
+    for(int i = 0; i < extensionLength; i++)
+        if(fileBrowser->fileExtensionBuffer[extensionLength - i] != itemName[fileNameLength - i])
+            return 0;
+    return 1;
+}
+
 void cutilFileBrowserLoadDirectoryContents(CUTILFileBrowser* fileBrowser)
 {
     if(!fileBrowser) return;
@@ -63,8 +75,11 @@ void cutilFileBrowserLoadDirectoryContents(CUTILFileBrowser* fileBrowser)
         // ignore self
         if(strcmp(pent->d_name, ".") == 0) continue;
 
+        int isDirectory = pent->d_type == DT_DIR;
+        if(!isDirectory && !fileHasExtension(fileBrowser, pent->d_name)) continue;
+
         strcpy(item->name, pent->d_name);
-        item->isDirectory = pent->d_type == DT_DIR;
+        item->isDirectory = isDirectory;
         item->isSelected = 0;
         fileBrowser->directoryContentsSize++;
     }

@@ -66,7 +66,6 @@ void s3vUIFinish()
 
 void s3vUIRenderTopToolbar(S3VContext* context)
 {
-
     if (nk_begin(ctx, "top-tool-bar", nk_rect(0, 0, width, TOP_TOOLBAR_HEIGHT), NK_WINDOW_NO_SCROLLBAR))
     {
         struct nk_vec2 menuSize = nk_vec2(125, 200);
@@ -79,7 +78,7 @@ void s3vUIRenderTopToolbar(S3VContext* context)
             if (nk_menu_item_label(ctx, "Open model", NK_TEXT_LEFT)) 
             {
                 if(!fileBrowser)
-                    fileBrowser = cutilFileBrowserInit(".");
+                    fileBrowser = cutilFileBrowserInit(".", "obj");
 
                 if(!renderFileBrowser)
                     renderFileBrowser = 1;
@@ -87,6 +86,7 @@ void s3vUIRenderTopToolbar(S3VContext* context)
             nk_menu_end(ctx);
         }
         
+        /*
         if (nk_menu_begin_label(ctx, "Help", NK_TEXT_LEFT, menuSize)) 
         {
             nk_layout_row_dynamic(ctx, 25, 1);
@@ -96,17 +96,17 @@ void s3vUIRenderTopToolbar(S3VContext* context)
             }
             nk_menu_end(ctx);
         }
+        */
     }
     nk_end(ctx);
 
     if (nk_begin(ctx, "top-fps", nk_rect(0, TOP_TOOLBAR_HEIGHT, width, TOP_TOOLBAR_HEIGHT), NK_WINDOW_NO_SCROLLBAR))
     {
-        nk_layout_row_static(ctx, TOP_TOOLBAR_HEIGHT, width, 2);
+        nk_layout_row_static(ctx, TOP_TOOLBAR_HEIGHT, width, 1);
         sprintf(fpsBuffer, "FPS: %d", context->framesPerSecond);
-        nk_label(ctx, fpsBuffer, NK_TEXT_RIGHT);
+        nk_label(ctx, fpsBuffer, NK_TEXT_LEFT);
     }
     nk_end(ctx);
-
 }
 
 void s3vUIRenderFilebrowser()

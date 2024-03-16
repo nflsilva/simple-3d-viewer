@@ -125,11 +125,6 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
     {
         if(line[0] == 'f' ||  line[0] == 'a')
         {
-
-            if(line[0] == 'a') {
-                printf("H");
-            }
-
             char* faceStart = line + 2;
             for(int i = 0; i < 3; i++) 
             {
@@ -147,6 +142,10 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
                 else if(sscanf(faceStart, "%d//%d", &p, &n) == 2)
                     sprintf(vertixId, "%d//%d", p, n);
             
+                // has position only
+                else if(sscanf(faceStart, "%d", &p) == 1)
+                    sprintf(vertixId, "%d", p);
+
                 else 
                     printf("invalid face %d from %s\n", i, line);
 
@@ -163,8 +162,10 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
                 }
 
                 cutilVectorPush(faces, &p);
-                cutilVectorPush(faces, &c);
-                cutilVectorPush(faces, &n);
+                if(c != 0)
+                    cutilVectorPush(faces, &c);
+                if(n != 0)
+                    cutilVectorPush(faces, &n);
                 cutilVectorPush(faces, vertixIndexPtr);
             }
         }
@@ -197,7 +198,6 @@ void s3vMeshCreateFromFile(const char* directoryPath, S3VMesh* mesh)
     // close the file
     fclose(file);
 
-    printf("done read file\n");
     unsigned int nElements = faces->count / 4;
     S3VMeshVertex* vertices = (S3VMeshVertex*)malloc(sizeof(S3VMeshVertex) * nVertices);
     unsigned int* indices = (unsigned int*)malloc(sizeof(unsigned int) * nElements);

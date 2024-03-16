@@ -7,3 +7,9 @@ float cutilMathClipf(float value, float max, float min)
     if(value < min) return min;
     return value;
 }
+
+float cutilMathAbs(float value)
+{
+    if(value < 0) return value * -1.0;
+    return value;
+}

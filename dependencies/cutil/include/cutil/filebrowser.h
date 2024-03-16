@@ -12,6 +12,7 @@
 #define CUTIL_FS_READ_CHUNK_SIZE 1024
 #define MAX_DIRECTORY_CONTENTS 1024
 #define MAX_PATH_NAME_SIZE 1024
+#define MAX_EXTENSION_SIZE 10
 
 /*!
  * Represents a file system item.
@@ -37,13 +38,14 @@ typedef struct CUTILFileBrowser {
 	int directoryContentsSize;
 	char directoryPathBuffer[MAX_PATH_NAME_SIZE];
 	char selectedItemPathBuffer[MAX_PATH_NAME_SIZE];
+	char fileExtensionBuffer[MAX_EXTENSION_SIZE];
 } CUTILFileBrowser;
 
 /*!
  * Creates and initialises a `fileBrowser` struct
  * @param directoryPath The initial directory of the file browser
  */
-CUTILFileBrowser* cutilFileBrowserInit(const char* directoryPath);
+CUTILFileBrowser* cutilFileBrowserInit(const char* directoryPath, const char* fileExtension);
 
 /*!
  * Destroys and cleans up a `fileBrowser` struct

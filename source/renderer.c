@@ -14,15 +14,13 @@ void s3vRendererInit()
     renderer->shader = s3vShaderCreateDefaultShader();
     renderer->pvmMatrix = cvecMat4FCreateIdentity();
     renderer->projectionMatrix = cvecMat4FCreateIdentity();
-    renderer->modelMatrix = cvecMat4FCreateIdentity();
     renderer->viewMatrix = cvecMat4FCreateIdentity();
     xRotation = cvecMat4FCreateIdentity();
     yRotation = cvecMat4FCreateIdentity();
 
-    eye = cvecVec3fCreate(0, 20, 50);
+    eye = cvecVec3fCreate(0, 0, 0);
     lookAt = cvecVec3fCreate(0, 0, 0);
     up = cvecVec3fCreate(0, 1, 0);
-    cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
 }
 
 void s3vRendererDestroy() 
@@ -53,17 +51,22 @@ void s3vRendererRender(S3VContext* context)
         return;
 
     float aspectRatio = context->windowHeight / (float)context->windowWidth;
-    cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, renderer->mesh->maxDistance * 3.0f, aspectRatio);
+    cvecMat4FPerspective(renderer->projectionMatrix, 0.1, 1000, 120, aspectRatio);
 
     if(context->mouseButton)
     {
-        cvecMat4FYAxisRotation(yRotation, -0.01 * context->mouseDeltaX);
-        cvecMat4Vec3Mult(yRotation, eye);
-        cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
-        //cvecMat4MatMult(renderer->viewMatrix, yRotation);
-
-        //cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
-        //cvecMat4MatMult(renderer->modelMatrix, xRotation);
+        float absDeltaX = cutilMathAbs(context->mouseDeltaX);
+        float absDeltaY = cutilMathAbs(context->mouseDeltaY);
+        if(absDeltaX > absDeltaY)
+        {
+            cvecMat4FYAxisRotation(yRotation, -0.01 * context->mouseDeltaX);
+            cvecMat4MatMult(renderer->modelMatrix, yRotation);
+        }
+        else 
+        {   
+            cvecMat4FXAxisRotation(xRotation, 0.05 * context->mouseDeltaY);
+            cvecMat4MatMult(renderer->modelMatrix, xRotation);
+        }
     }
 
     cvecMat4FSetIdentity(renderer->pvmMatrix);
@@ -86,5 +89,9 @@ void s3vRendererRenderMesh(S3VMesh* mesh)
     assert(renderer);
     if(renderer->mesh)
         s3vMeshDestroy(renderer->mesh);
+
     renderer->mesh = mesh;
+    renderer->modelMatrix = cvecMat4FCreateIdentity();
+    eye = cvecVec3fCreate(0, renderer->mesh->maxDistance * 0.3, renderer->mesh->maxDistance * 1.5);
+    cvecMat4FLookAt(renderer->viewMatrix, eye, lookAt, up);
 }
